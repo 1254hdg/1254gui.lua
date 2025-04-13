@@ -1,0 +1,79 @@
+-- 1254gui
+
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+
+-- Var olanı sil
+if CoreGui:FindFirstChild("1254gui") then
+    CoreGui:FindFirstChild("1254gui"):Destroy()
+end
+
+-- GUI oluştur
+local gui = Instance.new("ScreenGui", CoreGui)
+gui.Name = "1254gui"
+gui.ResetOnSpawn = false
+
+-- Ana pencere
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 300, 0, 350)
+frame.Position = UDim2.new(0.5, -150, 0.5, -175)
+frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+frame.BorderSizePixel = 4
+frame.Active = true
+frame.Draggable = true
+
+-- Başlık
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+title.Text = "1254gui"
+title.TextColor3 = Color3.fromRGB(255, 0, 0)
+title.TextSize = 22
+title.Font = Enum.Font.Code
+
+-- Buton fonksiyonu
+local function createButton(text, y, callback)
+    local btn = Instance.new("TextButton", frame)
+    btn.Size = UDim2.new(1, -20, 0, 40)
+    btn.Position = UDim2.new(0, 10, 0, y)
+    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    btn.Text = text
+    btn.TextColor3 = Color3.fromRGB(255, 0, 0)
+    btn.Font = Enum.Font.Code
+    btn.TextSize = 18
+    btn.MouseButton1Click:Connect(callback)
+end
+
+-- Butonlar
+createButton("Jumpscare", 50, function()
+    local j = Instance.new("TextLabel", gui)
+    j.Size = UDim2.new(1, 0, 1, 0)
+    j.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    j.Text = "BOO!"
+    j.TextColor3 = Color3.fromRGB(255, 0, 0)
+    j.Font = Enum.Font.SciFi
+    j.TextSize = 100
+    wait(1)
+    j:Destroy()
+end)
+
+createButton("Fake Ban", 100, function()
+    local ban = Instance.new("TextLabel", gui)
+    ban.Size = UDim2.new(1, 0, 1, 0)
+    ban.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    ban.Text = "You have been banned\nReason: 1254 Detected"
+    ban.TextColor3 = Color3.fromRGB(255, 0, 0)
+    ban.Font = Enum.Font.SourceSansBold
+    ban.TextSize = 32
+    ban.TextWrapped = true
+    wait(3)
+    ban:Destroy()
+end)
+
+createButton("Console Spam", 150, function()
+    for i = 1, 10 do
+        print("[1254gui]: Executing action " .. i)
+        wait(0.1)
+    end
+end)
