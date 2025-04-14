@@ -1,94 +1,84 @@
-local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local player = Players.LocalPlayer
 
--- RemoteEvent'leri hazırla
-local Remotes = {
+local remotes = {
 	Jumpscare = ReplicatedStorage:WaitForChild("Jumpscare"),
 	FakeBan = ReplicatedStorage:WaitForChild("FakeBan"),
-	FlipScreen = ReplicatedStorage:WaitForChild("FlipScreen"),
 	Teleport = ReplicatedStorage:WaitForChild("Teleport"),
+	FlipScreen = ReplicatedStorage:WaitForChild("FlipScreen"),
 	PlayMusic = ReplicatedStorage:WaitForChild("PlayMusic")
 }
 
--- GUI oluştur
+local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "1254GUI"
 
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 300, 0, 300)
 frame.Position = UDim2.new(0.5, -150, 0.5, -150)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Active = true
 frame.Draggable = true
 
 local buttons = {
-	{"Jumpscare", Remotes.Jumpscare},
-	{"Fake Ban", Remotes.FakeBan},
-	{"Flip Screen", Remotes.FlipScreen},
-	{"Teleport All", Remotes.Teleport},
-	{"Play Music", Remotes.PlayMusic}
+	{"Jumpscare", remotes.Jumpscare},
+	{"Fake Ban", remotes.FakeBan},
+	{"Flip Screen", remotes.FlipScreen},
+	{"Teleport Out", remotes.Teleport},
+	{"Play Music", remotes.PlayMusic}
 }
 
 for i, data in ipairs(buttons) do
 	local name, remote = data[1], data[2]
-	local button = Instance.new("TextButton", frame)
-	button.Size = UDim2.new(1, -20, 0, 40)
-	button.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 50)
-	button.Text = name
-	button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-	button.TextColor3 = Color3.new(1, 1, 1)
-	button.Font = Enum.Font.GothamBold
-	button.TextScaled = true
-	
-	button.MouseButton1Click:Connect(function()
+	local btn = Instance.new("TextButton", frame)
+	btn.Size = UDim2.new(1, -20, 0, 30)
+	btn.Position = UDim2.new(0, 10, 0, (i - 1) * 35 + 10)
+	btn.Text = name
+	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	btn.TextColor3 = Color3.new(1, 1, 1)
+	btn.MouseButton1Click:Connect(function()
 		if name == "Play Music" then
 			remote:FireServer("rbxassetid://142376088")
-		elseif name == "Teleport All" then
-			for _, p in ipairs(Players:GetPlayers()) do
-				remote:FireServer(p, 14590710949) -- hedef oyun ID
-			end
 		else
 			remote:FireServer()
 		end
 	end)
 end
 
--- Gelen client etkileri
-Remotes.Jumpscare.OnClientEvent:Connect(function()
+-- Avatarla Jumpscare
+remotes.Jumpscare.OnClientEvent:Connect(function()
 	local img = Instance.new("ImageLabel", gui)
 	img.Size = UDim2.new(1, 0, 1, 0)
-	img.Image = "rbxassetid://12345678" -- Jumpscare resmi
+	img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=1000296817&width=420&height=420&format=png"
 	img.BackgroundTransparency = 1
-
 	local sound = Instance.new("Sound", img)
 	sound.SoundId = "rbxassetid://5410086218"
+	sound.Volume = 1
 	sound:Play()
-
 	wait(2)
 	img:Destroy()
 end)
 
-Remotes.FakeBan.OnClientEvent:Connect(function()
-	local frame = Instance.new("Frame", gui)
-	frame.Size = UDim2.new(1, 0, 1, 0)
-	frame.BackgroundColor3 = Color3.new(0, 0, 0)
-
-	local label = Instance.new("TextLabel", frame)
-	label.Size = UDim2.new(1, 0, 1, 0)
-	label.Text = "You are permanently banned from this game.\nReason: 1254GUI Detected."
-	label.TextColor3 = Color3.new(1, 0, 0)
-	label.TextScaled = true
+remotes.FakeBan.OnClientEvent:Connect(function()
+	local banFrame = Instance.new("Frame", gui)
+	banFrame.Size = UDim2.new(1, 0, 1, 0)
+	banFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	local banText = Instance.new("TextLabel", banFrame)
+	banText.Size = UDim2.new(1, 0, 1, 0)
+	banText.Text = "You are permanently banned from this game.\nReason: 1254GUI detected."
+	banText.TextColor3 = Color3.new(1, 0, 0)
+	banText.TextScaled = true
 end)
 
-Remotes.FlipScreen.OnClientEvent:Connect(function()
-	local cam = workspace.CurrentCamera
-	cam.CFrame = cam.CFrame * CFrame.Angles(0, 0, math.rad(180))
+remotes.FlipScreen.OnClientEvent:Connect(function()
+	local camera = game.Workspace.CurrentCamera
+	camera.CFrame = camera.CFrame * CFrame.Angles(0, 0, math.rad(180))
 end)
 
-Remotes.PlayMusic.OnClientEvent:Connect(function(soundId)
-	local sound = Instance.new("Sound", player.PlayerGui)
-	sound.SoundId = soundId
-	sound.Volume = 1
-	sound:Play()
+remotes.PlayMusic.OnClientEvent:Connect(function(soundId)
+	local s = Instance.new("Sound", player:WaitForChild("PlayerGui"))
+	s.SoundId = soundId
+	s.Volume = 1
+	s.Looped = false
+	s:Play()
 end)
+
