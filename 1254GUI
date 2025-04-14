@@ -1,79 +1,94 @@
--- 1254gui
-
-local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
 
--- Var olanı sil
-if CoreGui:FindFirstChild("1254gui") then
-    CoreGui:FindFirstChild("1254gui"):Destroy()
-end
+-- RemoteEvent'leri hazırla
+local Remotes = {
+	Jumpscare = ReplicatedStorage:WaitForChild("Jumpscare"),
+	FakeBan = ReplicatedStorage:WaitForChild("FakeBan"),
+	FlipScreen = ReplicatedStorage:WaitForChild("FlipScreen"),
+	Teleport = ReplicatedStorage:WaitForChild("Teleport"),
+	PlayMusic = ReplicatedStorage:WaitForChild("PlayMusic")
+}
 
 -- GUI oluştur
-local gui = Instance.new("ScreenGui", CoreGui)
-gui.Name = "1254gui"
-gui.ResetOnSpawn = false
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "1254GUI"
 
--- Ana pencere
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 350)
-frame.Position = UDim2.new(0.5, -150, 0.5, -175)
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.BorderColor3 = Color3.fromRGB(255, 0, 0)
-frame.BorderSizePixel = 4
+frame.Size = UDim2.new(0, 300, 0, 300)
+frame.Position = UDim2.new(0.5, -150, 0.5, -150)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.Active = true
 frame.Draggable = true
 
--- Başlık
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-title.Text = "1254gui"
-title.TextColor3 = Color3.fromRGB(255, 0, 0)
-title.TextSize = 22
-title.Font = Enum.Font.Code
+local buttons = {
+	{"Jumpscare", Remotes.Jumpscare},
+	{"Fake Ban", Remotes.FakeBan},
+	{"Flip Screen", Remotes.FlipScreen},
+	{"Teleport All", Remotes.Teleport},
+	{"Play Music", Remotes.PlayMusic}
+}
 
--- Buton fonksiyonu
-local function createButton(text, y, callback)
-    local btn = Instance.new("TextButton", frame)
-    btn.Size = UDim2.new(1, -20, 0, 40)
-    btn.Position = UDim2.new(0, 10, 0, y)
-    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    btn.Text = text
-    btn.TextColor3 = Color3.fromRGB(255, 0, 0)
-    btn.Font = Enum.Font.Code
-    btn.TextSize = 18
-    btn.MouseButton1Click:Connect(callback)
+for i, data in ipairs(buttons) do
+	local name, remote = data[1], data[2]
+	local button = Instance.new("TextButton", frame)
+	button.Size = UDim2.new(1, -20, 0, 40)
+	button.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 50)
+	button.Text = name
+	button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.GothamBold
+	button.TextScaled = true
+	
+	button.MouseButton1Click:Connect(function()
+		if name == "Play Music" then
+			remote:FireServer("rbxassetid://142376088")
+		elseif name == "Teleport All" then
+			for _, p in ipairs(Players:GetPlayers()) do
+				remote:FireServer(p, 14590710949) -- hedef oyun ID
+			end
+		else
+			remote:FireServer()
+		end
+	end)
 end
 
--- Butonlar
-createButton("Jumpscare", 50, function()
-    local j = Instance.new("TextLabel", gui)
-    j.Size = UDim2.new(1, 0, 1, 0)
-    j.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    j.Text = "BOO!"
-    j.TextColor3 = Color3.fromRGB(255, 0, 0)
-    j.Font = Enum.Font.SciFi
-    j.TextSize = 100
-    wait(1)
-    j:Destroy()
+-- Gelen client etkileri
+Remotes.Jumpscare.OnClientEvent:Connect(function()
+	local img = Instance.new("ImageLabel", gui)
+	img.Size = UDim2.new(1, 0, 1, 0)
+	img.Image = "rbxassetid://12345678" -- Jumpscare resmi
+	img.BackgroundTransparency = 1
+
+	local sound = Instance.new("Sound", img)
+	sound.SoundId = "rbxassetid://5410086218"
+	sound:Play()
+
+	wait(2)
+	img:Destroy()
 end)
 
-createButton("Fake Ban", 100, function()
-    local ban = Instance.new("TextLabel", gui)
-    ban.Size = UDim2.new(1, 0, 1, 0)
-    ban.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    ban.Text = "You have been banned\nReason: 1254 Detected"
-    ban.TextColor3 = Color3.fromRGB(255, 0, 0)
-    ban.Font = Enum.Font.SourceSansBold
-    ban.TextSize = 32
-    ban.TextWrapped = true
-    wait(3)
-    ban:Destroy()
+Remotes.FakeBan.OnClientEvent:Connect(function()
+	local frame = Instance.new("Frame", gui)
+	frame.Size = UDim2.new(1, 0, 1, 0)
+	frame.BackgroundColor3 = Color3.new(0, 0, 0)
+
+	local label = Instance.new("TextLabel", frame)
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.Text = "You are permanently banned from this game.\nReason: 1254GUI Detected."
+	label.TextColor3 = Color3.new(1, 0, 0)
+	label.TextScaled = true
 end)
 
-createButton("Console Spam", 150, function()
-    for i = 1, 10 do
-        print("[1254gui]: Executing action " .. i)
-        wait(0.1)
-    end
+Remotes.FlipScreen.OnClientEvent:Connect(function()
+	local cam = workspace.CurrentCamera
+	cam.CFrame = cam.CFrame * CFrame.Angles(0, 0, math.rad(180))
+end)
+
+Remotes.PlayMusic.OnClientEvent:Connect(function(soundId)
+	local sound = Instance.new("Sound", player.PlayerGui)
+	sound.SoundId = soundId
+	sound.Volume = 1
+	sound:Play()
 end)
