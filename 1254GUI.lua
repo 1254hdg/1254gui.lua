@@ -1,12 +1,18 @@
--- 1254GUI v1.1 - Animasyonlu Sürüm
+-- 1254GUI v1.3 - Girişte Müzik Oynatmalı
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
-
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "1254GUI"
 gui.ResetOnSpawn = false
 
--- Başlık
+-- Giriş müziği
+local girişMüzik = Instance.new("Sound", gui)
+girişMüzik.SoundId = "rbxassetid://142376088"
+girişMüzik.Volume = 1
+girişMüzik.Looped = false
+girişMüzik:Play()
+
+-- GUI Başlık
 local title = Instance.new("TextLabel", gui)
 title.Size = UDim2.new(0, 300, 0, 40)
 title.Position = UDim2.new(0.5, -150, 0.1, 0)
@@ -17,19 +23,13 @@ title.TextScaled = true
 
 -- Ana Panel
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 330)
+frame.Size = UDim2.new(0, 300, 0, 400)
 frame.Position = UDim2.new(0.5, -150, 0.1, 50)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.Active = true
 frame.Draggable = true
-frame.BackgroundTransparency = 1
 
--- Tween ile görünür yap
-local tweenService = game:GetService("TweenService")
-local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-tweenService:Create(frame, tweenInfo, {BackgroundTransparency = 0}):Play()
-
--- Buton Fonksiyonu
+-- Buton oluşturma fonksiyonu
 local function createButton(text, yPos, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(1, -20, 0, 30)
@@ -42,7 +42,7 @@ local function createButton(text, yPos, callback)
 	btn.MouseButton1Click:Connect(callback)
 end
 
--- Jumpscare (Animasyonlu)
+-- Özellikler
 createButton("Jumpscare", 10, function()
 	local img = Instance.new("ImageLabel", gui)
 	img.Size = UDim2.new(0, 0, 0, 0)
@@ -57,19 +57,12 @@ createButton("Jumpscare", 10, function()
 	sound.Volume = 1
 	sound:Play()
 
-	local ts = game:GetService("TweenService")
-	local ti = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
-	ts:Create(img, ti, {Size = UDim2.new(1, 0, 1, 0)}):Play()
-
+	game:GetService("TweenService"):Create(img, TweenInfo.new(0.5, Enum.EasingStyle.Bounce), {Size = UDim2.new(1, 0, 1, 0)}):Play()
 	wait(2)
 	img:Destroy()
 end)
 
--- Fly
-local flying = false
 createButton("Fly", 50, function()
-	if flying then return end
-	flying = true
 	local hrp = char:WaitForChild("HumanoidRootPart")
 	local bv = Instance.new("BodyVelocity", hrp)
 	bv.Velocity = Vector3.new(0, 0, 0)
@@ -81,12 +74,10 @@ createButton("Fly", 50, function()
 	end)
 end)
 
--- Speed
 createButton("Speed", 90, function()
 	char:WaitForChild("Humanoid").WalkSpeed = 100
 end)
 
--- Beleş Para
 createButton("Beleş Para", 130, function()
 	local lbl = Instance.new("TextLabel", gui)
 	lbl.Size = UDim2.new(0, 200, 0, 50)
@@ -100,14 +91,13 @@ createButton("Beleş Para", 130, function()
 	lbl:Destroy()
 end)
 
+createButton("Gizli Mod", 170, function()
+	frame.Visible = not frame.Visible
+end)
+
 -- RGB Efekti
 spawn(function()
 	while wait(0.1) do
 		frame.BackgroundColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1)
 	end
-end)
-
--- Gizli Mod
-createButton("Gizli Mod", 170, function()
-	frame.Visible = not frame.Visible
 end)
