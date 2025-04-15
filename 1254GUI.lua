@@ -1,55 +1,48 @@
--- 1254GUI by 1254hdg - Local Phone GUI Script
-local UIS = game:GetService("UserInputService")
+-- 1254GUI by 1254hdg
 local player = game.Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
-local humanoid = char:WaitForChild("Humanoid")
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "1254GUI"
 gui.ResetOnSpawn = false
 
--- Gizli mod için başlangıçta görünmez
-gui.Enabled = false
+-- Gizli Mod Tuşu (Mobil için bir buton)
+local openBtn = Instance.new("TextButton", gui)
+openBtn.Size = UDim2.new(0, 120, 0, 40)
+openBtn.Position = UDim2.new(0, 10, 0.9, -50)
+openBtn.Text = "Open 1254GUI"
+openBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+openBtn.TextColor3 = Color3.new(0, 0, 0)
 
--- Gizli mod: Z tuşuna basınca GUI aç/kapat
-UIS.InputBegan:Connect(function(input)
-	if input.KeyCode == Enum.KeyCode.Z then
-		gui.Enabled = not gui.Enabled
-	end
-end)
-
--- Ana çerçeve
-local frame = Instance.new("Frame", gui)
+-- Ana GUI Frame
+local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 320, 0, 400)
 frame.Position = UDim2.new(0.5, -160, 0.5, -200)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
+frame.Visible = false
+frame.Parent = gui
 
--- RGB Başlık
+-- Başlık
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Text = "1254GUI by 1254hdg"
+title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 title.TextColor3 = Color3.new(1, 1, 1)
 title.TextScaled = true
-title.BackgroundTransparency = 1
 
--- RGB animasyonu
-task.spawn(function()
+-- RGB Efekti
+spawn(function()
 	while true do
-		local r = math.random()
-		local g = math.random()
-		local b = math.random()
-		title.TextColor3 = Color3.new(r, g, b)
-		wait(0.1)
+		for hue = 0, 1, 0.01 do
+			title.BackgroundColor3 = Color3.fromHSV(hue, 1, 1)
+			wait(0.05)
+		end
 	end
 end)
 
--- Buton fonksiyonu
-local function createButton(text, callback)
+-- Buton Oluşturucu
+local function createButton(text, y, callback)
 	local btn = Instance.new("TextButton", frame)
-	btn.Size = UDim2.new(1, -20, 0, 40)
-	btn.Position = UDim2.new(0, 10, 0, (#frame:GetChildren() - 1) * 45 + 10)
+	btn.Size = UDim2.new(0.9, 0, 0, 35)
+	btn.Position = UDim2.new(0.05, 0, 0, y)
 	btn.Text = text
 	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	btn.TextColor3 = Color3.new(1, 1, 1)
@@ -57,8 +50,8 @@ local function createButton(text, callback)
 	btn.MouseButton1Click:Connect(callback)
 end
 
--- Jumpscare
-createButton("Jumpscare", function()
+-- Özellikler
+createButton("Jumpscare", 50, function()
 	local img = Instance.new("ImageLabel", gui)
 	img.Size = UDim2.new(1, 0, 1, 0)
 	img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=4974544635&width=420&height=420&format=png"
@@ -71,57 +64,65 @@ createButton("Jumpscare", function()
 	img:Destroy()
 end)
 
+createButton("Fake Ban", 90, function()
+	local ban = Instance.new("TextLabel", gui)
+	ban.Size = UDim2.new(1, 0, 1, 0)
+	ban.BackgroundColor3 = Color3.new(0, 0, 0)
+	ban.Text = "You are permanently banned from this game.\nReason: 1254GUI detected."
+	ban.TextColor3 = Color3.new(1, 0, 0)
+	ban.TextScaled = true
+	wait(3)
+	ban:Destroy()
+end)
+
+createButton("Fly", 130, function()
+	local char = player.Character
+	if char then
+		char.HumanoidRootPart.Anchored = not char.HumanoidRootPart.Anchored
+	end
+end)
+
+createButton("Speed", 170, function()
+	local hum = player.Character and player.Character:FindFirstChild("Humanoid")
+	if hum then
+		hum.WalkSpeed = 100
+	end
+end)
+
+createButton("Beleş Para", 210, function()
+	local cash = Instance.new("BillboardGui", player.Character.Head)
+	cash.Size = UDim2.new(0, 100, 0, 50)
+	cash.AlwaysOnTop = true
+	local label = Instance.new("TextLabel", cash)
+	label.Size = UDim2.new(1, 0, 1, 0)
+	label.BackgroundTransparency = 1
+	label.Text = "+1000000$"
+	label.TextColor3 = Color3.new(0, 1, 0)
+	wait(3)
+	cash:Destroy()
+end)
+
+createButton("Play Music", 250, function()
+	local sound = Instance.new("Sound", player:WaitForChild("PlayerGui"))
+	sound.SoundId = "rbxassetid://142376088" -- Beğendiğin şarkı
+	sound.Volume = 1
+	sound.Looped = false
+	sound:Play()
+end)
+
 -- Avatar Spam
-createButton("Avatar Spam", function()
+createButton("Avatar Spam", 290, function()
 	for i = 1, 10 do
 		local img = Instance.new("ImageLabel", gui)
 		img.Size = UDim2.new(0, 100, 0, 100)
 		img.Position = UDim2.new(math.random(), 0, math.random(), 0)
 		img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=4974544635&width=420&height=420&format=png"
 		img.BackgroundTransparency = 1
-		game.Debris:AddItem(img, 2)
+		game:GetService("Debris"):AddItem(img, 2)
 	end
 end)
 
--- Fly
-createButton("Fly", function()
-	local bp = Instance.new("BodyPosition", char.PrimaryPart)
-	bp.MaxForce = Vector3.new(100000, 100000, 100000)
-	bp.Position = char.PrimaryPart.Position
-	UIS.InputChanged:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
-			bp.Position = char.PrimaryPart.Position + Vector3.new(0, 50, 0)
-		end
-	end)
-end)
-
--- Speed
-createButton("Speed Boost", function()
-	humanoid.WalkSpeed = 100
-end)
-
--- Beleş Para (Sahte gösterim)
-createButton("Beleş Para", function()
-	local coins = Instance.new("TextLabel", gui)
-	coins.Size = UDim2.new(0, 200, 0, 50)
-	coins.Position = UDim2.new(0.5, -100, 0, 0)
-	coins.Text = "Money: 999,999,999"
-	coins.TextScaled = true
-	coins.TextColor3 = Color3.new(1, 1, 0)
-	coins.BackgroundTransparency = 1
-	game.Debris:AddItem(coins, 5)
-end)
-
--- Flip Screen
-createButton("Flip Screen", function()
-	local cam = workspace.CurrentCamera
-	cam.CFrame = cam.CFrame * CFrame.Angles(0, 0, math.rad(180))
-end)
-
--- Play Music
-createButton("Play Music", function()
-	local s = Instance.new("Sound", player:WaitForChild("PlayerGui"))
-	s.SoundId = "rbxassetid://142376088"
-	s.Volume = 1
-	s:Play()
+-- Aç-Kapat Butonu
+openBtn.MouseButton1Click:Connect(function()
+	frame.Visible = not frame.Visible
 end)
