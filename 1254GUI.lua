@@ -1,20 +1,27 @@
--- 1254GUI by Özgür - Delta Uyumludur
-
-local UserInputService = game:GetService("UserInputService")
+-- 1254GUI by 1254hdg - Local Phone GUI Script
+local UIS = game:GetService("UserInputService")
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
-local guiVisible = false
-
--- GUI Oluştur
-local gui = Instance.new("ScreenGui", player.PlayerGui)
+local humanoid = char:WaitForChild("Humanoid")
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "1254GUI"
 gui.ResetOnSpawn = false
+
+-- Gizli mod için başlangıçta görünmez
 gui.Enabled = false
 
+-- Gizli mod: Z tuşuna basınca GUI aç/kapat
+UIS.InputBegan:Connect(function(input)
+	if input.KeyCode == Enum.KeyCode.Z then
+		gui.Enabled = not gui.Enabled
+	end
+end)
+
+-- Ana çerçeve
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 250, 0, 300)
-frame.Position = UDim2.new(0.5, -125, 0.5, -150)
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+frame.Size = UDim2.new(0, 320, 0, 400)
+frame.Position = UDim2.new(0.5, -160, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
@@ -22,67 +29,36 @@ frame.Draggable = true
 -- RGB Başlık
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Text = "1254GUI"
+title.Text = "1254GUI by 1254hdg"
+title.TextColor3 = Color3.new(1, 1, 1)
 title.TextScaled = true
 title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
 
+-- RGB animasyonu
 task.spawn(function()
 	while true do
-		title.TextColor3 = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+		local r = math.random()
+		local g = math.random()
+		local b = math.random()
+		title.TextColor3 = Color3.new(r, g, b)
 		wait(0.1)
 	end
 end)
 
--- Buton Oluşturma
-local function addButton(text, callback)
+-- Buton fonksiyonu
+local function createButton(text, callback)
 	local btn = Instance.new("TextButton", frame)
-	btn.Size = UDim2.new(1, -20, 0, 30)
-	btn.Position = UDim2.new(0, 10, 0, (#frame:GetChildren() - 1) * 35 + 10)
+	btn.Size = UDim2.new(1, -20, 0, 40)
+	btn.Position = UDim2.new(0, 10, 0, (#frame:GetChildren() - 1) * 45 + 10)
 	btn.Text = text
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	btn.TextColor3 = Color3.new(1, 1, 1)
-	btn.Font = Enum.Font.Gotham
 	btn.TextScaled = true
 	btn.MouseButton1Click:Connect(callback)
 end
 
--- Özellikler
-addButton("Fly (T)", function()
-	local flying = false
-	local vel = Instance.new("BodyVelocity")
-	vel.Velocity = Vector3.zero
-	vel.MaxForce = Vector3.new(99999,99999,99999)
-	vel.P = 1250
-	vel.Parent = char:WaitForChild("HumanoidRootPart")
-
-	UserInputService.InputBegan:Connect(function(i)
-		if i.KeyCode == Enum.KeyCode.T then
-			flying = not flying
-			vel.Velocity = flying and Vector3.new(0,50,0) or Vector3.zero
-		end
-	end)
-end)
-
-addButton("Speed", function()
-	char:WaitForChild("Humanoid").WalkSpeed = 100
-end)
-
-addButton("Beleş Para", function()
-	local fake = Instance.new("BillboardGui", player.Character.Head)
-	fake.Size = UDim2.new(0, 200, 0, 50)
-	fake.AlwaysOnTop = true
-	local label = Instance.new("TextLabel", fake)
-	label.Size = UDim2.new(1,0,1,0)
-	label.Text = "+9999999$"
-	label.TextColor3 = Color3.new(0,1,0)
-	label.BackgroundTransparency = 1
-	label.TextScaled = true
-	wait(2)
-	fake:Destroy()
-end)
-
-addButton("Jumpscare", function()
+-- Jumpscare
+createButton("Jumpscare", function()
 	local img = Instance.new("ImageLabel", gui)
 	img.Size = UDim2.new(1, 0, 1, 0)
 	img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=4974544635&width=420&height=420&format=png"
@@ -95,17 +71,57 @@ addButton("Jumpscare", function()
 	img:Destroy()
 end)
 
-addButton("Play Music", function()
-	local m = Instance.new("Sound", player.PlayerGui)
-	m.SoundId = "rbxassetid://142376088" -- Seçtiğin müzik
-	m.Volume = 1
-	m:Play()
+-- Avatar Spam
+createButton("Avatar Spam", function()
+	for i = 1, 10 do
+		local img = Instance.new("ImageLabel", gui)
+		img.Size = UDim2.new(0, 100, 0, 100)
+		img.Position = UDim2.new(math.random(), 0, math.random(), 0)
+		img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=4974544635&width=420&height=420&format=png"
+		img.BackgroundTransparency = 1
+		game.Debris:AddItem(img, 2)
+	end
 end)
 
--- Gizli Mod: F tuşuyla aç/kapat
-UserInputService.InputBegan:Connect(function(input, processed)
-	if not processed and input.KeyCode == Enum.KeyCode.F then
-		guiVisible = not guiVisible
-		gui.Enabled = guiVisible
-	end
-end
+-- Fly
+createButton("Fly", function()
+	local bp = Instance.new("BodyPosition", char.PrimaryPart)
+	bp.MaxForce = Vector3.new(100000, 100000, 100000)
+	bp.Position = char.PrimaryPart.Position
+	UIS.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+			bp.Position = char.PrimaryPart.Position + Vector3.new(0, 50, 0)
+		end
+	end)
+end)
+
+-- Speed
+createButton("Speed Boost", function()
+	humanoid.WalkSpeed = 100
+end)
+
+-- Beleş Para (Sahte gösterim)
+createButton("Beleş Para", function()
+	local coins = Instance.new("TextLabel", gui)
+	coins.Size = UDim2.new(0, 200, 0, 50)
+	coins.Position = UDim2.new(0.5, -100, 0, 0)
+	coins.Text = "Money: 999,999,999"
+	coins.TextScaled = true
+	coins.TextColor3 = Color3.new(1, 1, 0)
+	coins.BackgroundTransparency = 1
+	game.Debris:AddItem(coins, 5)
+end)
+
+-- Flip Screen
+createButton("Flip Screen", function()
+	local cam = workspace.CurrentCamera
+	cam.CFrame = cam.CFrame * CFrame.Angles(0, 0, math.rad(180))
+end)
+
+-- Play Music
+createButton("Play Music", function()
+	local s = Instance.new("Sound", player:WaitForChild("PlayerGui"))
+	s.SoundId = "rbxassetid://142376088"
+	s.Volume = 1
+	s:Play()
+end)
