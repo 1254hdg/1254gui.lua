@@ -1,10 +1,10 @@
--- 1254GUI by 1254hdg (Mobil Uyumlu)
+-- 1254GUI by 1254hdg (Mobil Uyumlu ve Gelişmiş)
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
 gui.Name = "1254GUI"
 gui.ResetOnSpawn = false
 
--- Gizli Mod: GUI 'G' tuşu ile aç/kapanır
+-- Gizli Mod: G tuşu ile aç/kapat
 local UIS = game:GetService("UserInputService")
 gui.Enabled = false
 UIS.InputBegan:Connect(function(input)
@@ -13,24 +13,33 @@ UIS.InputBegan:Connect(function(input)
 	end
 end)
 
+-- Loading
+local loading = Instance.new("TextLabel", gui)
+loading.Size = UDim2.new(1, 0, 1, 0)
+loading.BackgroundColor3 = Color3.new(0, 0, 0)
+loading.Text = "1254GUI Loading..."
+loading.TextColor3 = Color3.new(1, 1, 1)
+loading.TextScaled = true
+wait(2)
+loading:Destroy()
+
 -- Frame
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 320, 0, 380)
-frame.Position = UDim2.new(0.5, -160, 0.5, -190)
+frame.Size = UDim2.new(0, 320, 0, 420)
+frame.Position = UDim2.new(0.5, -160, 0.5, -210)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
 
--- RGB Başlık
+-- Başlık (RGB)
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Text = "1254GUI by 1254hdg"
-title.TextScaled = true
 title.BackgroundTransparency = 1
 title.Font = Enum.Font.SourceSansBold
+title.TextScaled = true
 
--- RGB efekti
 spawn(function()
 	local hue = 0
 	while true do
@@ -41,12 +50,10 @@ spawn(function()
 end)
 
 -- Buton Fonksiyonu
-local yOffset = 45
 local function createButton(name, callback)
 	local btn = Instance.new("TextButton", frame)
 	btn.Size = UDim2.new(1, -20, 0, 30)
-	btn.Position = UDim2.new(0, 10, 0, yOffset)
-	yOffset = yOffset + 35
+	btn.Position = UDim2.new(0, 10, 0, (#frame:GetChildren() - 1) * 35)
 	btn.Text = name
 	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 	btn.TextColor3 = Color3.new(1, 1, 1)
@@ -55,15 +62,17 @@ local function createButton(name, callback)
 	btn.MouseButton1Click:Connect(callback)
 end
 
--- Fonksiyonlar
+-- Fly
 createButton("Fly", function()
 	loadstring(game:HttpGet("https://raw.githubusercontent.com/1254hdg/flyspeed/main/fly.lua"))()
 end)
 
+-- Speed
 createButton("Speed", function()
 	player.Character.Humanoid.WalkSpeed = 100
 end)
 
+-- Beleş Para
 createButton("Beleş Para", function()
 	local leader = player:FindFirstChild("leaderstats")
 	if leader then
@@ -75,6 +84,7 @@ createButton("Beleş Para", function()
 	end
 end)
 
+-- Jumpscare
 createButton("Jumpscare", function()
 	local img = Instance.new("ImageLabel", gui)
 	img.Size = UDim2.new(1, 0, 1, 0)
@@ -88,29 +98,22 @@ createButton("Jumpscare", function()
 	img:Destroy()
 end)
 
+-- Müzik
 createButton("Müzik Oynat", function()
 	local s = Instance.new("Sound", gui)
-	s.SoundId = "rbxassetid://142376088"
+	s.SoundId = "rbxassetid://142376088" -- Sevdiğin şarkı
 	s.Volume = 1
 	s.Looped = false
 	s:Play()
 end)
 
-createButton("Avatarımı Herkese Uygula", function()
-	for _, plr in pairs(game.Players:GetPlayers()) do
-		if plr ~= player and plr.Character then
-			for _, part in pairs(plr.Character:GetChildren()) do
-				if part:IsA("Accessory") or part:IsA("Shirt") or part:IsA("Pants") or part:IsA("BodyColors") then
-					part:Destroy()
-				end
-			end
-
-			local cloneChar = player.Character:Clone()
-			for _, item in pairs(cloneChar:GetChildren()) do
-				if item:IsA("Accessory") or item:IsA("Shirt") or item:IsA("Pants") or item:IsA("BodyColors") then
-					item:Clone().Parent = plr.Character
-				end
-			end
+-- Avatar Spam (Sadece Senin Ekranında)
+createButton("Avatar Herkese", function()
+	for _, v in pairs(game.Players:GetPlayers()) do
+		if v.Character and v.Character:FindFirstChild("HumanoidDescription") then
+			local desc = Instance.new("HumanoidDescription")
+			desc:ApplyDescription(player.Character.Humanoid:GetAppliedDescription())
+			v.Character.Humanoid:ApplyDescription(desc)
 		end
 	end
 end)
