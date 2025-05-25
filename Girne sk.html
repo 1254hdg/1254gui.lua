@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Girne SK</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e0f7fa);
+    }
+    header {
+      background-color: #007f5f;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    header img {
+      height: 80px;
+      vertical-align: middle;
+    }
+    nav {
+      background-color: #004e35;
+      padding: 15px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .player-card {
+      background-color: white;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .player-info {
+      flex: 1;
+    }
+    .player-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+    }
+    .stats {
+      font-size: 14px;
+      color: #333;
+    }
+    footer {
+      background-color:#222;
+      color: white;
+      text-align:center;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    @media screen and (max-width: 600px) {
+      .player-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Football.svg/1024px-Football.svg.png" alt="Girne SK Logo">
+    <h1>Girne SK</h1>
+    <p>Bu takım açken bile tok oynar!</p>
+  </header>  <nav>
+    <a href="#">Ana Sayfa</a>
+    <a href="#kadro">Kadro</a>
+    <a href="#istatistik">İstatistik</a>
+    <a href="#iletisim">İletişim</a>
+  </nav>  <div class="container" id="kadro">
+    <h2>Takım Kadrosu</h2><div class="player-card">
+  <div class="player-info">
+    <h3>Özgür - Orta Saha</h3>
+    <p class="stats">Gıda: Hamburger | Hız: 83 | CLM: 90 | DFS: 70</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>Baran - Kaleci</h3>
+    <p class="stats">Gıda: Enerji İçeceği | Hız: 72 | CLM: 20 | DFS: 89</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>Memo - Defans</h3>
+    <p class="stats">Gıda: Pastırma | Hız: 60 | CLM: 15 | DFS: 92</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>Samet - Defans</h3>
+    <p class="stats">Gıda: Salata | Hız: 68 | CLM: 33 | DFS: 85</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>Abdullah - Sol Kanat</h3>
+    <p class="stats">Gıda: Tavuk Şiş | Hız: 90 | CLM: 80 | DFS: 60</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>Yusuf - Sağ Kanat</h3>
+    <p class="stats">Gıda: Tantuni | Hız: 88 | CLM: 85 | DFS: 58</p>
+  </div>
+</div>
+
+<div class="player-card">
+  <div class="player-info">
+    <h3>İsmail - Forvet</h3>
+    <p class="stats">Gıda: Pizza | Hız: 86 | CLM: 90 | DFS: 40</p>
+  </div>
+</div>
+
+  </div>  <div class="container" id="istatistik">
+    <h2>Lig Durumu</h2>
+    <p>Girne SK şu an Troll Lig'de 1. sırada! 7 maçta 6 galibiyet, 1 beraberlik, 0 mağlubiyet. Kaleye gelen 3 şutun 2’si Baran tarafından tokatlanmıştır.</p>
+  </div>  <footer id="iletisim">
+    <p>İletişim: <a href="mailto:girnesk@trollmail.com" style="color:#0ff;">girnesk@trollmail.com</a></p>
+    <p>Instagram: @girnesk_official | Discord: GirneSK#2025</p>
+    <p>&copy; 2025 Girne Spor Kulübü - Tüm troll hakları saklıdır.</p>
+  </footer>
+</body>
+</html>
